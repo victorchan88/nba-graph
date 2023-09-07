@@ -1,6 +1,9 @@
 from neo4j import GraphDatabase
 from dotenv import load_dotenv
+from flask import Flask, jsonify, request
 import os
+
+app = Flask(__name__)
 
 class GraphQuery:
     
@@ -46,6 +49,31 @@ class GraphQuery:
         result = tx.run(query, node_id=node_id)
         return list(result)
 
+@app.route('/upstream', methods=['GET'])
+def upstream():
+    node_id = request.args.get('node_id')
+    if not node_id:
+        return jsonify({"error": "node_id parameter is required"}), 400
+    try:
+        node_id = int(node_id)
+        nodes = graph_query.get_upstream_nodes(node_id)
+        print(nodes)
+        return jsonify({"upstream_nodes": nodes})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/downstream', methods=['GET'])
+def downstream():
+    node_id = request.args.get('node_id')
+    if not node_id:
+        return jsonify({"error": "node_id parameter is required"}), 400
+    try:
+        node_id = int(node_id)
+        nodes = graph_query.get_downstream_nodes(node_id)
+        return jsonify({"downstream_nodes": nodes})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 if __name__ == "__main__":
     load_dotenv()
     uri = os.getenv('URI')
@@ -53,9 +81,10 @@ if __name__ == "__main__":
     password = os.getenv('DB_PASS')
 
     graph_query = GraphQuery(uri, user, password)
+    app.run(debug=True, port=8080)
 
-    node_id_example = 4
-    print("Upstream nodes:", graph_query.get_upstream_nodes(node_id_example))
-    print("Downstream nodes:", graph_query.get_downstream_nodes(node_id_example))
+    # node_id_example = 4
+    # print("Upstream nodes:", graph_query.get_upstream_nodes(node_id_example))
+    # print("Downstream nodes:", graph_query.get_downstream_nodes(node_id_example))
 
     graph_query.close()
