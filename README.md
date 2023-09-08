@@ -15,6 +15,7 @@ This Flask application provides a simple API for traversing a Neo4j graph databa
 
 - Python 3.x
 - Neo4j instance running
+- Load the nba-data.cypher file into the Neo4j instance
 
 
 ## Installation
