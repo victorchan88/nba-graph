@@ -83,8 +83,4 @@ if __name__ == "__main__":
     graph_query = GraphQuery(uri, user, password)
     app.run(debug=True, port=8080)
 
-    # node_id_example = 4
-    # print("Upstream nodes:", graph_query.get_upstream_nodes(node_id_example))
-    # print("Downstream nodes:", graph_query.get_downstream_nodes(node_id_example))
-
     graph_query.close()
