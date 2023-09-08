@@ -42,6 +42,9 @@ CREATE
 (joel)-[:TEAMMATES]-> (tobias),
 (joel)<-[:TEAMMATES]- (tobias),
 
+(lebron)-[:FORMER_TEAMMATES]-> (joel)
+(lebron)<-[:FORMER_TEAMMATES]- (lebron)
+
 (frank)-[:COACHES]->(lebron),
 (frank)-[:COACHES]->(anthony),
 (frank)-[:COACHES]->(russell),
